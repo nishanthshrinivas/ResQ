@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>ResQ | Disaster Management</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+font-family:Arial,Helvetica,sans-serif;
+background:#06111f;
+color:#fff;
+line-height:1.6;
+overflow-x:hidden
+}
+a{text-decoration:none;color:inherit}
+button{font-family:inherit;cursor:pointer}
+
+.navbar{
+position:sticky;
+top:0;
+z-index:1000;
+height:72px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 7%;
+background:rgba(6,17,31,.92);
+backdrop-filter:blur(15px);
+border-bottom:1px solid rgba(255,255,255,.08)
+}
+
+.logo{
+display:flex;
+align-items:center;
+gap:10px;
+font-size:24px;
+font-weight:800;
+color:#fff
+}
+.logo-icon{
+width:38px;
+height:38px;
+display:grid;
+place-items:center;
+border-radius:10px;
+background:#ff3b4f;
+box-shadow:0 0 20px rgba(255,59,79,.4)
+}
+
+.nav-links{
+display:flex;
+gap:28px;
+list-style:none
+}
+.nav-links a{
+color:#aebdce;
+font-size:14px;
+transition:.3s
+}
+.nav-links a:hover{color:#fff}
+
+.nav-sos{
+padding:10px 18px;
+border:0;
+border-radius:25px;
+background:#ff3b4f;
+color:white;
+font-weight:700;
+transition:.3s
+}
+.nav-sos:hover{
+transform:translateY(-2px);
+box-shadow:0 8px 25px rgba(255,59,79,.35)
+}
+
+.hero{
+min-height:680px;
+display:grid;
+grid-template-columns:1.05fr .95fr;
+align-items:center;
+gap:60px;
+padding:80px 7%;
+background:
+radial-gradient(circle at 80% 30%,rgba(18,105,180,.2),transparent 35%),
+radial-gradient(circle at 10% 80%,rgba(0,212,255,.08),transparent 30%)
+}
+
+.status-pill{
+display:inline-flex;
+align-items:center;
+gap:8px;
+padding:7px 14px;
+border-radius:20px;
+background:rgba(39,220,142,.1);
+border:1px solid rgba(39,220,142,.25);
+color:#42e6a1;
+font-size:13px;
+margin-bottom:22px
+}
+.status-dot{
+width:8px;
+height:8px;
+border-radius:50%;
+background:#42e6a1;
+box-shadow:0 0 10px #42e6a1
+}
+
+.hero h1{
+font-size:clamp(45px,6vw,80px);
+line-height:1.05;
+margin-bottom:22px;
+letter-spacing:-3px
+}
+.hero h1 span{color:#ff3b4f}
+.hero p{
+max-width:620px;
+font-size:18px;
+color:#9aabba;
+margin-bottom:30px
+}
+
+.hero-buttons{
+display:flex;
+gap:15px;
+flex-wrap:wrap
+}
+.btn{
+padding:13px 23px;
+border-radius:8px;
+border:1px solid #24364b;
+background:#0d1c2d;
+color:#fff;
+font-weight:700;
+transition:.3s
+}
+.btn:hover{
+transform:translateY(-3px);
+border-color:#3c5975
+}
+.btn-primary{
+background:#ff3b4f;
+border-color:#ff3b4f
+}
+.btn-primary:hover{
+box-shadow:0 10px 30px rgba(255,59,79,.3)
+}
+
+.hero-stats{
+display:flex;
+gap:40px;
+margin-top:45px;
+flex-wrap:wrap
+}
+.stat strong{
+display:block;
+font-size:28px
+}
+.stat span{
+font-size:12px;
+color:#718398;
+text-transform:uppercase;
+letter-spacing:1px
+}
+
+.hero-visual{
+display:flex;
+justify-content:center;
+align-items:center;
+position:relative
+}
+
+.radar{
+width:390px;
+height:390px;
+border-radius:50%;
+position:relative;
+background:
+radial-gradient(circle,transparent 0 19%,rgba(32,174,255,.05) 20% 20.5%,transparent 21%),
+radial-gradient(circle,transparent 0 39%,rgba(32,174,255,.08) 39.5% 40%,transparent 40.5%),
+radial-gradient(circle,transparent 0 59%,rgba(32,174,255,.08) 59.5% 60%,transparent 60.5%),
+radial-gradient(circle,transparent 0 79%,rgba(32,174,255,.08) 79.5% 80%,transparent 80.5%);
+border:1px solid rgba(48,164,255,.25);
+box-shadow:0 0 70px rgba(0,145,255,.08)
+}
+
+.radar:before,.radar:after{
+content:"";
+position:absolute;
+left:50%;
+top:0;
+width:1px;
+height:100%;
+background:rgba(47,157,237,.18)
+}
+.radar:after{
+transform:rotate(90deg)
+}
+
+.radar-ring{
+position:absolute;
+inset:20%;
+border:1px solid rgba(48,164,255,.18);
+border-radius:50%
+}
+
+.radar-sweep{
+position:absolute;
+width:50%;
+height:50%;
+left:50%;
+top:50%;
+transform-origin:0 0;
+background:linear-gradient(45deg,rgba(0,214,255,.25),transparent 70%);
+clip-path:polygon(0 0,100% 0,100% 4%,0 0);
+animation:sweep 4s linear infinite
+}
+
+@keyframes sweep{
+to{transform:rotate(360deg)}
+}
+
+.radar-center{
+position:absolute;
+left:50%;
+top:50%;
+transform:translate(-50%,-50%);
+width:24px;
+height:24px;
+border-radius:50%;
+background:#31d8ff;
+box-shadow:0 0 25px #31d8ff
+}
+
+.location{
+position:absolute;
+font-size:11px;
+color:#67d9ff;
+padding:5px 9px;
+border-radius:5px;
+background:rgba(8,28,48,.9);
+border:1px solid rgba(54,173,230,.25)
+}
+.location.one{top:22%;left:65%}
+.location.two{top:60%;left:20%}
+.location.three{bottom:17%;right:18%}
+
+.floating-card{
+position:absolute;
+right:-20px;
+bottom:20px;
+padding:14px 18px;
+background:#0d1b2c;
+border:1px solid #22374e;
+border-radius:12px;
+box-shadow:0 15px 35px rgba(0,0,0,.3)
+}
+.floating-card small{color:#718398}
+.floating-card strong{
+display:block;
+color:#42e6a1;
+font-size:14px
+}
+
+section{
+padding:90px 7%
+}
+
+.section-title{
+text-align:center;
+margin-bottom:45px
+}
+.section-title span{
+color:#ff3b4f;
+font-size:13px;
+font-weight:700;
+letter-spacing:2px;
+text-transform:uppercase
+}
+.section-title h2{
+font-size:38px;
+margin:8px 0
+}
+.section-title p{
+color:#8293a7;
+max-width:650px;
+margin:auto
+}
+
+.alert-box{
+max-width:1100px;
+margin:auto;
+padding:20px;
+display:flex;
+align-items:center;
+gap:18px;
+background:linear-gradient(90deg,rgba(255,59,79,.12),rgba(255,59,79,.03));
+border:1px solid rgba(255,59,79,.3);
+border-radius:12px
+}
+.alert-icon{
+width:45px;
+height:45px;
+display:grid;
+place-items:center;
+border-radius:50%;
+background:#ff3b4f;
+flex-shrink:0
+}
+.alert-box h3{font-size:16px}
+.alert-box p{
+font-size:13px;
+color:#8fa0b3
+}
+.alert-time{
+margin-left:auto;
+font-size:12px;
+color:#ff7582;
+white-space:nowrap
+}
+
+.dashboard{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:18px;
+max-width:1100px;
+margin:auto
+}
+
+.service{
+padding:25px;
+background:#0b1929;
+border:1px solid #1b2d42;
+border-radius:14px;
+transition:.3s
+}
+.service:hover{
+transform:translateY(-7px);
+border-color:#2d597d;
+box-shadow:0 15px 35px rgba(0,0,0,.2)
+}
+.service-icon{
+font-size:28px;
+margin-bottom:15px
+}
+.service h3{
+font-size:17px;
+margin-bottom:8px
+}
+.service p{
+font-size:13px;
+color:#8191a4;
+margin-bottom:18px
+}
+.service button{
+border:0;
+background:none;
+color:#38cfff;
+font-size:13px;
+font-weight:700
+}
+
+.prep-grid,.disaster-grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:20px
+}
+
+.prep-card,.disaster-card{
+padding:28px;
+border-radius:15px;
+background:#0b1929;
+border:1px solid #1a2c40;
+transition:.3s
+}
+.prep-card:hover,.disaster-card:hover{
+transform:translateY(-6px);
+border-color:#2c536f
+}
+.card-number{
+color:#ff3b4f;
+font-size:13px;
+font-weight:800;
+margin-bottom:12px
+}
+.prep-card h3,.disaster-card h3{
+margin-bottom:10px
+}
+.prep-card p,.disaster-card p{
+font-size:14px;
+color:#8494a6
+}
+
+.disaster-card{
+position:relative;
+overflow:hidden
+}
+.disaster-card:after{
+content:"";
+position:absolute;
+right:-30px;
+bottom:-40px;
+width:120px;
+height:120px;
+border-radius:50%;
+background:rgba(0,174,255,.06)
+}
+
+.contact-section{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:30px;
+align-items:stretch
+}
+.contact-card{
+padding:35px;
+border-radius:16px;
+background:#0b1929;
+border:1px solid #1a2d41
+}
+.contact-card h3{margin-bottom:10px}
+.contact-card p{
+color:#8495a8;
+font-size:14px
+}
+.contact-list{
+margin-top:20px;
+display:grid;
+gap:14px
+}
+.contact-item{
+padding:14px;
+background:#091522;
+border-radius:9px;
+border:1px solid #16273a
+}
+.contact-item strong{
+display:block;
+font-size:14px
+}
+.contact-item span{
+font-size:13px;
+color:#718398
+}
+
+footer{
+padding:35px 7%;
+border-top:1px solid #142537;
+display:flex;
+justify-content:space-between;
+align-items:center;
+color:#64768a;
+font-size:13px
+}
+
+.modal{
+position:fixed;
+inset:0;
+z-index:2000;
+display:none;
+align-items:center;
+justify-content:center;
+padding:20px;
+background:rgba(0,0,0,.78);
+backdrop-filter:blur(8px)
+}
+.modal.active{display:flex}
+.modal-box{
+width:min(430px,100%);
+padding:35px;
+text-align:center;
+background:#0b1929;
+border:1px solid #2a3d52;
+border-radius:20px;
+box-shadow:0 25px 70px rgba(0,0,0,.5)
+}
+.sos-circle{
+width:90px;
+height:90px;
+margin:0 auto 20px;
+display:grid;
+place-items:center;
+border-radius:50%;
+background:#ff3b4f;
+font-size:38px;
+box-shadow:0 0 40px rgba(255,59,79,.35)
+}
+.modal-box h2{margin-bottom:8px}
+.modal-box p{
+color:#899bad;
+font-size:14px;
+margin-bottom:25px
+}
+.modal-actions{
+display:flex;
+gap:10px;
+justify-content:center
+}
+.modal-actions button{
+padding:11px 20px;
+border-radius:8px;
+border:0;
+font-weight:700
+}
+.call-btn{
+background:#ff3b4f;
+color:#fff
+}
+.close-btn{
+background:#1a2b3e;
+color:#fff
+}
+
+.reveal{
+opacity:0;
+transform:translateY(25px);
+transition:opacity .7s ease,transform .7s ease
+}
+.reveal.show{
+opacity:1;
+transform:translateY(0)
+}
+
+@media(max-width:900px){
+.nav-links{display:none}
+.hero{
+grid-template-columns:1fr;
+text-align:center
+}
+.hero p{margin-left:auto;margin-right:auto}
+.hero-buttons,.hero-stats{justify-content:center}
+.dashboard{grid-template-columns:repeat(2,1fr)}
+.prep-grid,.disaster-grid{grid-template-columns:repeat(2,1fr)}
+.contact-section{grid-template-columns:1fr}
+}
+
+@media(max-width:600px){
+.navbar{padding:0 5%}
+.hero,section{padding-left:5%;padding-right:5%}
+.hero h1{font-size:48px}
+.radar{
+width:300px;
+height:300px
+}
+.dashboard,.prep-grid,.disaster-grid{
+grid-template-columns:1fr
+}
+.alert-box{align-items:flex-start}
+.alert-time{
+margin-left:0
+}
+footer{
+flex-direction:column;
+gap:10px;
+text-align:center
+}
+}
+</style>
+</head>
+
+<body>
+
+<nav class="navbar">
+<a href="#" class="logo">
+<span class="logo-icon">✚</span>
+ResQ
+</a>
+
+<ul class="nav-links">
+<li><a href="#alerts">Alerts</a></li>
+<li><a href="#services">Services</a></li>
+<li><a href="#prepare">Prepare</a></li>
+<li><a href="#disasters">Disasters</a></li>
+<li><a href="#contact">Contact</a></li>
+</ul>
+
+<button class="nav-sos" onclick="openSOS()">SOS</button>
+</nav>
+
+<header class="hero">
+
+<div class="hero-content reveal">
+
+<div class="status-pill">
+<span class="status-dot"></span>
+System Online
+</div>
+
+<h1>Ready for<br><span>Anything.</span></h1>
+
+<p>
+ResQ is a disaster management platform designed to help
+people stay informed, prepared and connected during
+emergencies.
+</p>
+
+<div class="hero-buttons">
+<button class="btn btn-primary" onclick="openSOS()">🚨 Emergency SOS</button>
+<a href="#prepare" class="btn">Prepare Yourself →</a>
+</div>
+
+<div class="hero-stats">
+<div class="stat">
+<strong>24/7</strong>
+<span>Monitoring</span>
+</div>
+
+<div class="stat">
+<strong>4</strong>
+<span>Emergency Services</span>
+</div>
+
+<div class="stat">
+<strong>100%</strong>
+<span>Preparedness</span>
+</div>
+</div>
+
+</div>
+
+<div class="hero-visual reveal">
+
+<div class="radar">
+
+<div class="radar-ring"></div>
+<div class="radar-sweep"></div>
+<div class="radar-center"></div>
+
+<div class="location one">⚠ ALERT</div>
+<div class="location two">● SAFE</div>
+<div class="location three">● ACTIVE</div>
+
+</div>
+
+<div class="floating-card">
+<small>Current Status</small>
+<strong>● All Systems Operational</strong>
+</div>
+
+</div>
+
+</header>
+
+<section id="alerts">
+
+<div class="section-title reveal">
+<span>Live Updates</span>
+<h2>Emergency Alerts</h2>
+<p>Stay updated with important disaster and emergency information.</p>
+</div>
+
+<div class="alert-box reveal">
+
+<div class="alert-icon">⚠</div>
+
+<div>
+<h3>Emergency Monitoring Active</h3>
+<p>No major emergencies reported in your monitored area.</p>
+</div>
+
+<div class="alert-time" id="alertTime">
+Just now
+</div>
+
+</div>
+
+</section>
+
+<section id="services">
+
+<div class="section-title reveal">
+<span>Emergency Support</span>
+<h2>ResQ Services</h2>
+<p>Quick access to important emergency services.</p>
+</div>
+
+<div class="dashboard">
+
+<div class="service reveal">
+<div class="service-icon">🚑</div>
+<h3>Medical Emergency</h3>
+<p>Get immediate medical assistance during emergencies.</p>
+<button onclick="demo('Medical emergency service')">Request Help →</button>
+</div>
+
+<div class="service reveal">
+<div class="service-icon">🚒</div>
+<h3>Fire & Rescue</h3>
+<p>Contact fire and rescue services when required.</p>
+<button onclick="demo('Fire and rescue service')">Contact →</button>
+</div>
+
+<div class="service reveal">
+<div class="service-icon">👮</div>
+<h3>Police</h3>
+<p>Reach police authorities for emergency assistance.</p>
+<button onclick="demo('Police emergency service')">Contact →</button>
+</div>
+
+<div class="service reveal">
+<div class="service-icon">📍</div>
+<h3>Safe Locations</h3>
+<p>Find nearby shelters and safe evacuation locations.</p>
+<button onclick="demo('Safe location finder')">Find Location →</button>
+</div>
+
+</div>
+
+</section>
+
+<section id="prepare">
+
+<div class="section-title reveal">
+<span>Be Prepared</span>
+<h2>Disaster Preparedness</h2>
+<p>Simple actions can help you respond effectively during emergencies.</p>
+</div>
+
+<div class="prep-grid">
+
+<div class="prep-card reveal">
+<div class="card-number">01</div>
+<h3>Emergency Kit</h3>
+<p>
+Keep water, food, medicines, flashlight,
+batteries and essential documents ready.
+</p>
+</div>
+
+<div class="prep-card reveal">
+<div class="card-number">02</div>
+<h3>Emergency Contacts</h3>
+<p>
+Save important emergency numbers and
+share your emergency plan with family.
+</p>
+</div>
+
+<div class="prep-card reveal">
+<div class="card-number">03</div>
+<h3>Know Your Route</h3>
+<p>
+Identify evacuation routes and nearby
+safe locations before an emergency.
+</p>
+</div>
+
+</div>
+
+</section>
+
+<section id="disasters">
+
+<div class="section-title reveal">
+<span>Know the Risks</span>
+<h2>Disaster Information</h2>
+<p>Learn basic safety actions for different disaster situations.</p>
+</div>
+
+<div class="disaster-grid">
+
+<div class="disaster-card reveal">
+<div class="card-number">01</div>
+<h3>🌊 Flood</h3>
+<p>
+Move to higher ground, avoid flood water
+and follow official evacuation instructions.
+</p>
+</div>
+
+<div class="disaster-card reveal">
+<div class="card-number">02</div>
+<h3>🌎 Earthquake</h3>
+<p>
+Drop, cover and hold on. Stay away from
+windows and unstable structures.
+</p>
+</div>
+
+<div class="disaster-card reveal">
+<div class="card-number">03</div>
+<h3>🔥 Fire</h3>
+<p>
+Leave the building immediately and avoid
+using elevators during a fire emergency.
+</p>
+</div>
+
+<div class="disaster-card reveal">
+<div class="card-number">04</div>
+<h3>🌪 Cyclone</h3>
+<p>
+Stay indoors, secure loose objects and
+follow official weather warnings.
+</p>
+</div>
+
+<div class="disaster-card reveal">
+<div class="card-number">05</div>
+<h3>⚡ Lightning</h3>
+<p>
+Move indoors and avoid open spaces,
+isolated trees and metal structures.
+</p>
+</div>
+
+<div class="disaster-card reveal">
+<div class="card-number">06</div>
+<h3>🏭 Industrial Accident</h3>
+<p>
+Move away from hazardous areas and follow
+the instructions of emergency authorities.
+</p>
+</div>
+
+</div>
+
+</section>
+
+<section id="contact">
+
+<div class="section-title reveal">
+<span>Emergency Network</span>
+<h2>Emergency Contacts</h2>
+<p>Keep these essential services accessible.</p>
+</div>
+
+<div class="contact-section">
+
+<div class="contact-card reveal">
+
+<h3>India Emergency Numbers</h3>
+<p>Common emergency contact numbers.</p>
+
+<div class="contact-list">
+
+<div class="contact-item">
+<strong>🚨 National Emergency</strong>
+<span>112</span>
+</div>
+
+<div class="contact-item">
+<strong>👮 Police</strong>
+<span>100</span>
+</div>
+
+<div class="contact-item">
+<strong>🚑 Ambulance</strong>
+<span>108</span>
+</div>
+
+<div class="contact-item">
+<strong>🚒 Fire & Rescue</strong>
+<span>101</span>
+</div>
+
+</div>
+
+</div>
+
+<div class="contact-card reveal">
+
+<h3>Emergency Safety Reminder</h3>
+
+<p>
+During a disaster, remain calm, follow official
+instructions and avoid spreading unverified information.
+</p>
+
+<div class="contact-list">
+
+<div class="contact-item">
+<strong>✓ Stay Calm</strong>
+<span>Think clearly before taking action.</span>
+</div>
+
+<div class="contact-item">
+<strong>✓ Follow Authorities</strong>
+<span>Listen to official emergency instructions.</span>
+</div>
+
+<div class="contact-item">
+<strong>✓ Help Others</strong>
+<span>Assist children, elderly people and vulnerable persons when safe.</span>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<footer>
+<div>© 2026 ResQ Disaster Management</div>
+<div>Built for Safety • Preparedness • Response</div>
+</footer>
+
+<div class="modal" id="sosModal">
+
+<div class="modal-box">
+
+<div class="sos-circle">🚨</div>
+
+<h2>Emergency SOS</h2>
+
+<p>
+This is a demo emergency interface.
+Choose an action below.
+</p>
+
+<div class="modal-actions">
+<button class="call-btn" onclick="demo('Emergency call')">
+📞 Call Emergency
+</button>
+
+<button class="close-btn" onclick="closeSOS()">
+Close
+</button>
+</div>
+
+</div>
+
+</div>
+
+<script>
+const modal=document.getElementById("sosModal");
+
+function openSOS(){
+modal.classList.add("active");
+}
+
+function closeSOS(){
+modal.classList.remove("active");
+}
+
+modal.addEventListener("click",e=>{
+if(e.target===modal)closeSOS();
+});
+
+document.addEventListener("keydown",e=>{
+if(e.key==="Escape")closeSOS();
+});
+
+function demo(service){
+alert(service+" is a demo feature.");
+}
+
+const observer=new IntersectionObserver(entries=>{
+entries.forEach(entry=>{
+if(entry.isIntersecting){
+entry.target.classList.add("show");
+observer.unobserve(entry.target);
+}
+});
+},{threshold:.12});
+
+document.querySelectorAll(
+".reveal"
+).forEach(el=>observer.observe(el));
+
+const alertTime=document.getElementById("alertTime");
+
+setInterval(()=>{
+const now=new Date();
+alertTime.textContent=
+now.toLocaleTimeString([],{
+hour:"2-digit",
+minute:"2-digit"
+});
+},1000);
+</script>
+
+</body>
+</html>
